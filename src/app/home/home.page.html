@@ -19,7 +19,7 @@
     <div class="recipeBox" *ngIf="setLoaded; else preLoad">
       <div class="titles">
         <div class="rTitle">
-          <h3 >{{sortedRecipes[index].title}}</h3>
+          <h3>{{sortedRecipes[index].title}}</h3>
         </div>
         <div class="cals">
           <p>{{sortedRecipes[index].cals}}<i>kcals</i></p>
@@ -97,19 +97,20 @@
             </ion-select>
           </ion-item>
           <ion-item>
-            <ion-input [(ngModel)]="filterOps.maxCarbs" label="Max Carbs" labelPlacement="stacked" placeholder="Enter fat limit"></ion-input>
+            <ion-input [(ngModel)]="filterOps.maxCarbs" label="Max Carbs" labelPlacement="stacked"
+              placeholder="Enter carb limit (g)"></ion-input>
           </ion-item>
           <ion-item>
             <ion-input [(ngModel)]="filterOps.maxFat" label="Max Fat" labelPlacement="stacked"
-              placeholder="Enter fat limit"></ion-input>
+              placeholder="Enter fat limit (g)"></ion-input>
           </ion-item>
           <ion-item>
             <ion-input [(ngModel)]="filterOps.maxCals" label="Max Cals" labelPlacement="stacked"
-              placeholder="Enter calorie limit"></ion-input>
+              placeholder="Enter calorie limit (kCals)"></ion-input>
           </ion-item>
           <ion-item>
             <ion-input [(ngModel)]="filterOps.minProtein" label="Min Protein" labelPlacement="stacked"
-              placeholder="Enter minimum protein"></ion-input>
+              placeholder="Enter minimum protein (g)"></ion-input>
           </ion-item>
          
         </ion-card-content>
@@ -123,8 +124,7 @@
 <ion-modal trigger="open-modal" (willDismiss)="($event)">
   <ng-template>
     <ion-content class="ion-padding">
-      <ion-button class="backBtn" (click)="cancel()" fill="clear">
-        < BACK</ion-button>
+      <ion-button class="backBtn" (click)="cancel()" fill="clear">BACK</ion-button>
           <div class="nutrition-label">
             <div class="nHeader">
               <div class="footnote">* Percent Daily Values are based on a 2,000 calorie diet.</div>

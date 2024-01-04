@@ -15,3 +15,4 @@ describe('RecipePage', () => {
     expect(component).toBeTruthy();
   });
 });
+
