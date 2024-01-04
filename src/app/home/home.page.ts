@@ -150,16 +150,10 @@ export class HomePage implements OnInit{
   } 
   
   // Navigate through recipes.
-  slideNav(step:number){
-    if(this.setLoaded){
-      // Loops around if edges reached.
-      if(this.index == this.sortedRecipes.length -1 && step > 0) {
-        this.index = 0;
-      } else if(this.index == 0 && step < 0) {
-        this.index = this.sortedRecipes.length - 1;
-      } else {
-        this.index += step;
-      }
+  slideNav(step: number) {
+    if (this.setLoaded) {
+      // Calculate the new index using modulo to handle edge cases and loop through recipes.
+      this.index = (this.index + step + this.sortedRecipes.length) % this.sortedRecipes.length;
     }
   }
   colorChange(){
