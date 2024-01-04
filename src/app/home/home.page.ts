@@ -149,13 +149,14 @@ export class HomePage implements OnInit{
 
   } 
   
-  // Navigate through recipes
+  // Navigate through recipes.
   slideNav(step:number){
     if(this.setLoaded){
+      // Loops around if edges reached.
       if(this.index == this.sortedRecipes.length -1 && step > 0) {
-        return;
+        this.index = 0;
       } else if(this.index == 0 && step < 0) {
-        return;
+        this.index = this.sortedRecipes.length - 1;
       } else {
         this.index += step;
       }
