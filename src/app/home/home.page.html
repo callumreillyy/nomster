@@ -49,7 +49,7 @@
       </div>
       <div id="navBox">
         <button class="navBtn" (click)="slideNav(-1)"><</button>
-       
+        <p *ngIf="setLoaded">{{index+1}}/{{sortedRecipes.length}}</p>
         <button class="navBtn" (click)="slideNav(1)">></button>
       </div>
       <p *ngIf="showSuccessMessage" class="successMsg"><ion-icon name="checkmark-circle" color="success"></ion-icon> Recipe Successfully Saved!</p>
