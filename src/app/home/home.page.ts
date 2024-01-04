@@ -67,6 +67,7 @@ export class HomePage implements OnInit{
 
 
   constructor(private getter: GetRecipeService, private router:Router, private modalController: ModalController, private database: DatabaseService, private loadingController: LoadingController) {}
+
   ngOnInit(){
     let temp = sessionStorage.getItem('recipes');
     let temp2 = sessionStorage.getItem('nutrients');
@@ -145,15 +146,18 @@ export class HomePage implements OnInit{
       sessionStorage.removeItem('recipes'); 
       this.message = "Sorry, we couldn't find any recipes matching that criteria. Remove / Alter the current filter to get more results"; 
     }
-    
-  } 
 
+  } 
+  
+  // Navigate through recipes
   slideNav(step:number){
     if(this.setLoaded){
-      if(step >= 0 || step <= this.sortedRecipes.length -1) {
-      this.index = this.index + step; 
+      if(this.index == this.sortedRecipes.length -1 && step > 0) {
+        return;
+      } else if(this.index == 0 && step < 0) {
+        return;
       } else {
-        this.index = 0; 
+        this.index += step;
       }
     }
   }
@@ -177,14 +181,22 @@ export class HomePage implements OnInit{
       this.btnColor['background'] = 'radial-gradient(100% 100% at 100% 0%, #ffdc30 0%, #FF6700 100%)'; 
      }
   }
-  async sendFilterData() {
-    const loading = await this.loadingController.create({
-      message: 'Fetching Your Recipes...', // could also just use loading I think this is more user friendly though.
+  // Styling for loading box. Appears when user presses "APPLY" recipe filter.
+  async presentLoading() {
+    console.log('starting loading');
+     const loading = await this.loadingController.create({
+      spinner: 'circles',
+      keyboardClose: true,
+      message: 'Finding Your Recipes...'
     });
-  
+    return await loading.present();
+  }
+
+  // Api call to fetch and set recipe data. 
+  async sendFilterData() {
     try {
-      await loading.present();
-  
+      await this.presentLoading(); // start loader
+
       console.log(this.filterOps);
       this.getter.applyFilter(this.filterOps).subscribe(
         async (response) => {
@@ -206,12 +218,10 @@ export class HomePage implements OnInit{
         }
       );
     } finally {
-      await loading.dismiss();
+      this.loadingController.dismiss();
     }
   }
   
-
-
   cancel() {
     this.modalController.dismiss(null, 'cancel');
   }
