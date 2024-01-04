@@ -6,7 +6,9 @@ import { Meal } from '../interfaces/meal';
 import { Filter } from '../interfaces/filter';
 import { Favourite } from '../interfaces/favourite';
 
-import { IonModal, ModalController } from '@ionic/angular';
+import { IonModal, ModalController, LoadingController } from '@ionic/angular';
+
+
 
 @Component({
   selector: 'app-home',
@@ -64,7 +66,7 @@ export class HomePage implements OnInit{
   'breakfast','soup','beverage','sauce','marinade','fingerfood','snack','drink'];
 
 
-  constructor(private getter: GetRecipeService, private router:Router, private modalController: ModalController, private database: DatabaseService) {}
+  constructor(private getter: GetRecipeService, private router:Router, private modalController: ModalController, private database: DatabaseService, private loadingController: LoadingController) {}
   ngOnInit(){
     let temp = sessionStorage.getItem('recipes');
     let temp2 = sessionStorage.getItem('nutrients');
@@ -175,28 +177,39 @@ export class HomePage implements OnInit{
       this.btnColor['background'] = 'radial-gradient(100% 100% at 100% 0%, #ffdc30 0%, #FF6700 100%)'; 
      }
   }
-  sendFilterData() {
-    console.log(this.filterOps)
-        this.getter.applyFilter(this.filterOps).subscribe(
-          async (response) => {
-            if (!response.error) {
-            this.recipes = []; 
-            this.sortedRecipes = []; 
-            this.recipes = response.results; 
+  async sendFilterData() {
+    const loading = await this.loadingController.create({
+      message: 'Fetching Your Recipes...', // could also just use loading I think this is more user friendly though.
+    });
+  
+    try {
+      await loading.present();
+  
+      console.log(this.filterOps);
+      this.getter.applyFilter(this.filterOps).subscribe(
+        async (response) => {
+          if (!response.error) {
+            this.recipes = [];
+            this.sortedRecipes = [];
+            this.recipes = response.results;
             console.log(this.recipes);
-            this.recipeSorter(); 
-            } else if(this.recipes = []){
-              this.message = "Sorry, we couldn't find any recipes matching that criteria. Remove / Alter the current filter to get more results"
-            }
-            else {
-              console.error('Error:', response.error); 
-            }
-          },
-          (err) => {
-            console.error('Observer got an error:', err); // Log the general error
+            console.log("melon");
+            this.recipeSorter();
+          } else if (this.recipes.length === 0) {
+            this.message = "Sorry, we couldn't find any recipes matching that criteria. Remove / Alter the current filter to get more results";
+          } else {
+            console.error('Error:', response.error);
           }
-        );
+        },
+        (err) => {
+          console.error('Observer got an error:', err); // Log the general error
+        }
+      );
+    } finally {
+      await loading.dismiss();
+    }
   }
+  
 
 
   cancel() {
